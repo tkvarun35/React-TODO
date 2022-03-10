@@ -1,0 +1,147 @@
+import * as React from "react";
+// import "./App.css";
+import { get, set, values, del } from "idb-keyval";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import App from "./homepage";
+
+function MainApp() {
+  // values().then((values) => (a = values));
+  // console.log(a);
+  const [inputlist, setInputList] = useState("");
+  const [Items, setItems] = useState([]);
+
+  useEffect(() => {
+    get("TODO").then((val) => {
+      if (val) setItems(val);
+    });
+  }, []);
+
+  const clickHandler = () => {
+    // console.log({ inputlist });
+    // console.log(count);
+    // set("TODO", [...Items, inputlist]);
+
+    console.log(Items);
+    if (inputlist != "") {
+      set("TODO", [...Items, { name: inputlist, id: uuidv4() }])
+        .then(() => {
+          get("TODO").then((val) => {
+            console.log(val);
+          });
+        })
+        .catch((err) => console.log("It failed!", err));
+    }
+
+    // console.log(count);
+
+    // values().then((values) =>
+    //   setItems(() => {
+    //     console.log(values);
+    //     return [values];
+    //   })
+    // );
+
+    get("TODO").then((val) =>
+      setItems(() => {
+        console.log(val);
+        return val;
+      })
+    );
+  };
+
+  const deleteHandler = (id) => {
+    console.log(id);
+
+    // del("TODO");
+  };
+
+  const itemEvent = (event) => {
+    setInputList(event.target.value);
+    // console.log({ inputlist });
+  };
+
+  return (
+    <>
+      <div className="App">
+        <div className="card text-center">
+          <div className="card-header">TO DO</div>
+          <div className="card-body">
+            <div className="input-group mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="To Do Task"
+                aria-label="Recipient's username"
+                aria-describedby="button-addon2"
+                id="input"
+                onChange={itemEvent}
+              />
+              <button
+                className="btn btn-success"
+                type="button"
+                id="button-addon2"
+                onClick={() => clickHandler()}
+              >
+                +Add
+              </button>
+            </div>
+            {/* <ol>
+            {Items.map((itemval) => {
+              return (
+                <li>
+                  {itemval.name} &nbsp;
+                  <button type="button" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </li>
+              );
+            })}
+          </ol> */}
+            {/*
+          <table>
+            {Items.map((itemval) => {
+              return (
+                <tr>
+                  <td>{itemval.name}</td>
+                  <td>
+                    <button type="button" class="btn">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </table> */}
+
+            <div class="card">
+              <div class="card-body">
+                {Items.map((itemval) => {
+                  return (
+                    <div>
+                      <tr>
+                        <td>{itemval.name}</td>
+                        <td>
+                          <button
+                            type="button"
+                            class="btn"
+                            onClick={() => deleteHandler(itemval)}
+                          >
+                            <i class="fa-solid fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+          {/* <div className="card-footer text-muted">2 days ago</div> */}
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default MainApp;

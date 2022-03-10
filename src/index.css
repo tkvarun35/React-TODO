@@ -1,0 +1,18 @@
+.list .fa-trash:hover {
+  color: crimson;
+}
+.list .fa-pencil:hover {
+  color: blue;
+}
+
+.mb-3 .btn-dark:hover {
+  background-color: green;
+}
+
+.card-header {
+  background-color: rgb(197, 186, 207);
+}
+/* 
+.container {
+  background-color: black;
+} */
