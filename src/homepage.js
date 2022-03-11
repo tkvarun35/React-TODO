@@ -60,6 +60,7 @@ export default function App() {
     for (let i = 0; i < Items.length; i++) {
       if (Items[i].id === update.id) {
         Items[i].name = inputlist;
+        break;
       }
     }
     set("TODO", Items);
